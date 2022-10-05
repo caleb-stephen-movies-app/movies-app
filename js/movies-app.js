@@ -42,6 +42,7 @@ $(function() {
                     <p>Director: ${movie.director}</p>
                     <p>Actors: ${movie.actors}</p>
                     <p>Year: ${movie.year}</p>
+                    <button class="deleteBtn" data-delete="${movie.id}">Delete Btn</button>
                 </div>
             `);
         });
@@ -128,6 +129,18 @@ $(function() {
         });
     }
 
+
+    async function deleteMovie(id){
+        console.log("inside delete movie")
+        let deleteOptions = {
+            method: 'DELETE',
+            headers: {
+                'Content-Type' : 'application/json'
+            }
+        }
+        fetch(`${moviesURL}/${id}`, deleteOptions).then(printAllMovies(getAllMovies()));
+
+    }
     // <option className="movie-list-item" data-movie-id="${movie.id}">${movie.original_title}</option>
 
 
@@ -156,6 +169,14 @@ $(function() {
     $("#addMovieBtn").click(() => {
         console.log($("#addMovieText").data("movie-id"));
     });
+
+    $(document.body).click(".deleteBtn", function (e){
+        e.preventDefault()
+        console.log("inside delete btn click event")
+        console.log($(this).attr("data-delete"))
+        deleteMovie($(this).attr("data-delete"))
+
+    })
 
 
 });
