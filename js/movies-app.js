@@ -21,7 +21,7 @@ $(function() {
         moviesPromise.then(movieData => {
             movieData.forEach((movie) => {
                 cardDiv.append(`
-                    <div>
+                    <div class="divCard" data-movie-id="${movie.id}">
                         <h2>Title: ${movie.title.toUpperCase()}</h2>
                         <p>Genre: ${movie.genre}</p>
                         <img src=${movie.poster}>
@@ -29,7 +29,8 @@ $(function() {
                         <p>Director: ${movie.director}</p>
                         <p>Actors: ${movie.actors}</p>
                         <p>Year: ${movie.year}</p>
-                        <button class="deleteBtn" data-delete="${movie.id}">Delete Btn</button>
+                        <button class="deleteBtn">Delete Btn</button>
+                        <button class="editBtn">Edit Btn</button>
                     </div>
                 `);
             });
@@ -153,7 +154,12 @@ $(function() {
 
     $(document.body).on("click", ".deleteBtn", function (e){
         e.preventDefault()
-        deleteMovie($(this).attr("data-delete"))
+        deleteMovie($(this).parent().attr("data-movie-id"))
+
+    })
+    $(document.body).on("click", ".editBtn", function (e){
+        e.preventDefault()
+        editMovie($(this).parent().attr("data-movie-id"))
 
     })
 
