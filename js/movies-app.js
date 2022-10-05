@@ -54,21 +54,41 @@ $(function() {
         let movieToAdd = {
             title: movieData.title,
             poster: `https://image.tmdb.org/t/p/original/${movieData.poster_path}`,
-
-
+            year: movieData.release_date.substring(0,4),
+            genre: getGenres(movieData.genres),
+            plot: movieData.overview
         }
 
-        // add movie to our db
-        // initialize post
-        // const postOptions = {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type' : 'application/json'
-        //     },
-        //     body: JSON.stringify(bookToPost)
-        // }
+        // add movieToAdd to our database
 
-        // re print all the movies
+        // initialize post
+        const postOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type' : 'application/json'
+            },
+            body: JSON.stringify(movieToAdd)
+        }
+
+        fetch(moviesURL, postOptions).then(() => {
+            // clear text box
+            $("#addMovieText").val('');
+            // clear movies list
+            $("#moviesList").empty();
+            // reprint all movies
+            printAllMovies(getAllMovies());
+        });
+    }
+
+    function getGenres(genreArray) {
+        return genreArray.reduce((genresString, genre, index) => {
+            if(index === 0){
+                return genre.name;
+            } else {
+                return `${genresString}, ${genre.name}`
+            }
+        }, '');
+
     }
 
     async function findMovie(id){
