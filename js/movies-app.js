@@ -1,18 +1,6 @@
 $(function() {
 
 
-    // async function getUserLastCommitAsync(username) {
-    //     try {
-    //         let response = await fetch(`https://api.github.com/users/${username}`);
-    //         let events = await response.json();
-    //         console.log(events);
-    //     }
-    //     catch(err) {
-    //         console.log(err);
-    //     }
-    // }
-
-
     // declare global moviesurl variable
     const moviesURL = "https://liberating-military-cyclone.glitch.me/movies";
     let allMoviesPromise;
@@ -30,28 +18,27 @@ $(function() {
     async function printAllMovies(moviesPromise) {
         const cardDiv = $("#cardDiv");
         cardDiv.empty();
-        let movieData = await moviesPromise;
-        console.log(movieData)
-        movieData.forEach((movie) =>{
-            cardDiv.append(`
-                <div>
-                    <h2>Title: ${movie.title.toUpperCase()}</h2>
-                    <p>Genre: ${movie.genre}</p>
-                    <img src=${movie.poster}>
-                    <p>Plot :${movie.plot}</p>
-                    <p>Director: ${movie.director}</p>
-                    <p>Actors: ${movie.actors}</p>
-                    <p>Year: ${movie.year}</p>
-                    <button class="deleteBtn" data-delete="${movie.id}">Delete Btn</button>
-                </div>
-            `);
+        moviesPromise.then(movieData => {
+            movieData.forEach((movie) => {
+                cardDiv.append(`
+                    <div>
+                        <h2>Title: ${movie.title.toUpperCase()}</h2>
+                        <p>Genre: ${movie.genre}</p>
+                        <img src=${movie.poster}>
+                        <p>Plot :${movie.plot}</p>
+                        <p>Director: ${movie.director}</p>
+                        <p>Actors: ${movie.actors}</p>
+                        <p>Year: ${movie.year}</p>
+                        <button class="deleteBtn" data-delete="${movie.id}">Delete Btn</button>
+                    </div>
+                `);
+            });
         });
     }
 
     async function addMovie(id) {
         // finding all movie data for movie with id
         let movieData = await findMovie(id).then(results => results);
-        console.log(movieData);
         let movieToAdd = {
             title: movieData.title,
             poster: `https://image.tmdb.org/t/p/original/${movieData.poster_path}`,
@@ -103,7 +90,6 @@ $(function() {
     }
 
     async function searchForMovies(title) {
-        console.log("inside getNewMovieData " + title);
         try {
             let response = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${TMDB_KEY}&query=${title}&include_adult=false`);
             let data = await response.json();
@@ -131,16 +117,14 @@ $(function() {
 
 
     async function deleteMovie(id){
-        console.log("inside delete movie. id recieved is:")
-        console.log(id);
         let deleteOptions = {
             method: 'DELETE',
             headers: {
                 'Content-Type' : 'application/json'
             }
         }
-        fetch(`${moviesURL}/${id}`, deleteOptions).then(printAllMovies(getAllMovies()));
-
+        let deleteData = await fetch(`${moviesURL}/${id}`, deleteOptions).then(results => results);
+        printAllMovies(getAllMovies());
     }
     // <option className="movie-list-item" data-movie-id="${movie.id}">${movie.original_title}</option>
 
@@ -165,10 +149,6 @@ $(function() {
 
     $(document.body).on("click", "#moviesList .card", function() {
         addMovie($(this).attr("data-movie-id"));
-    });
-
-    $("#addMovieBtn").click(() => {
-        console.log($("#addMovieText").data("movie-id"));
     });
 
     $(document.body).on("click", ".deleteBtn", function (e){
