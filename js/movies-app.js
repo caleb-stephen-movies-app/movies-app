@@ -47,15 +47,16 @@ $(function() {
         });
     }
 
-    async function addMovie(title) {
-        // get the movie info based on the information from TMDB api that is found with title from user
-        let movieSearchDataPromise = searchForMovie(title);
-        movieSearchDataPromise.then(results => {
-            console.log(results);
-        });
+    async function addMovie(id) {
+        // finding all movie data for movie with id
+        let movieData = await findMovie(id).then(results => results);
+        console.log(movieData);
+        let movieToAdd = {
+            title: movieData.title,
+            poster: `https://image.tmdb.org/t/p/original/${movieData.poster_path}`,
 
-        // show datalist so user can choose correct movie
 
+        }
 
         // add movie to our db
         // initialize post
@@ -70,7 +71,17 @@ $(function() {
         // re print all the movies
     }
 
-    async function searchForMovie(title) {
+    async function findMovie(id){
+        try {
+            let response = await fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${TMDB_KEY}`);
+            let data = await response.json();
+            return data;
+        } catch(err) {
+            console.log(err);
+        }
+    }
+
+    async function searchForMovies(title) {
         console.log("inside getNewMovieData " + title);
         try {
             let response = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${TMDB_KEY}&query=${title}&include_adult=false`);
@@ -82,7 +93,7 @@ $(function() {
     }
 
     async function populateMoviesList(title) {
-        let movieList = await searchForMovie(title).then(results => results);
+        let movieList = await searchForMovies(title).then(results => results);
         $("#moviesList").empty();
         movieList.results.forEach((movie, index) => {
             if(index < 6) {
@@ -119,7 +130,7 @@ $(function() {
     // });
 
     $(document.body).on("click", "#moviesList .card", function() {
-        console.log($(this).attr("data-movie-id"));
+        addMovie($(this).attr("data-movie-id"));
     });
 
     $("#addMovieBtn").click(() => {
