@@ -29,7 +29,24 @@ $(function() {
 
     async function printAllMovies(moviesPromise) {
         let movieData = await moviesPromise;
+        console.log(movieData)
+        movieData.forEach((movie) =>{
 
+
+            $('#cardDiv').append(`
+            <div>
+                <h2>Title: ${movie.title.toUpperCase()}</h2>
+                <p>Genre: ${movie.genre}</p>
+                <img src=${movie.poster}>
+                <p>Plot :${movie.plot}</p>
+                <p>Director: ${movie.director}</p>
+                <p>Actors: ${movie.actors}</p>
+                <p>Year: ${movie.year}</p>
+            </div>
+            
+            
+            `)
+        })
     }
 
 
