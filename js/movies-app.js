@@ -131,7 +131,8 @@ $(function() {
 
 
     async function deleteMovie(id){
-        console.log("inside delete movie")
+        console.log("inside delete movie. id recieved is:")
+        console.log(id);
         let deleteOptions = {
             method: 'DELETE',
             headers: {
@@ -170,10 +171,8 @@ $(function() {
         console.log($("#addMovieText").data("movie-id"));
     });
 
-    $(document.body).click(".deleteBtn", function (e){
+    $(document.body).on("click", ".deleteBtn", function (e){
         e.preventDefault()
-        console.log("inside delete btn click event")
-        console.log($(this).attr("data-delete"))
         deleteMovie($(this).attr("data-delete"))
 
     })
