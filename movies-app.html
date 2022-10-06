@@ -13,37 +13,39 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
     <script src="js/keys.js"></script>
     <script src="js/jquery-3.6.1.min.js"></script>
-
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
 <!--Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark text-light sticky-top">
     <div class="container-fluid">
-        <h2 id="header-title" class="nav-item mx-3">Movie App</h2>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span id="collapse-btn">Current Weather</span>
-        </button>
-        <div class="collapse navbar-collapse me-auto mb-2 mb-lg-0" id="navbarNav">
-            <ul class="navbar-nav">
-                <li id="addMovie" class="nav-item">
-                    <a id="addMovieBtn" role="button" href="#addMovieModal" class="nav-link" data-bs-toggle="modal">
-                        Add
-                    </a>
-                </li>
-            </ul>
-        </div>
+        <h2 id="header-title" class="nav-item mx-3">
+            <a id="addMovieBtn" role="button" href="#addMovieModal" class="nav-link" data-bs-toggle="modal">
+                Add Movie
+            </a>
+        </h2>
+<!--        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">-->
+<!--            <span id="collapse-btn">Current Weather</span>-->
+<!--        </button>-->
+<!--        <div class="collapse navbar-collapse me-auto mb-2 mb-lg-0" id="navbarNav">-->
+<!--            <ul class="navbar-nav">-->
+<!--                <li id="addMovie" class="nav-item">-->
+<!--                    <a id="addMovieBtn" role="button" href="#addMovieModal" class="nav-link" data-bs-toggle="modal">-->
+<!--                        Add-->
+<!--                    </a>-->
+<!--                </li>-->
+<!--            </ul>-->
+<!--        </div>-->
     </div>
 </nav>
 
 
-<!-- Modal -->
+<!-- Add Movie Modal -->
 <div class="modal fade" id="addMovieModal" tabindex="-1">
     <div class="modal-dialog modal-xl">
         <div class="modal-content bg-dark">
             <div class="modal-header">
-                <h5 class="modal-title text-light">Add Movie</h5>
-                <button id="modalCloseBtn" type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body text-center">
                 <input type="text" id="addMovieText" list="moviesList" class="w-75" autocomplete="off">
@@ -55,11 +57,27 @@
     </div>
 </div>
 
+<!-- Single Movie Modal -->
+<div class="modal fade" id="singleMovieModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark">
+            <div class="modal-header">
+                <h5 class="modal-title text-light">Add Movie</h5>
+                <button id="singleModalCloseBtn" type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-light">
+                <div class="container mt-3">
+                    <div id="singleMovie" class="row"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-<!--<label for="addMovieText"></label>-->
+<div class="container my-3">
+    <div id="cardsDiv" class="row g-5"></div>
+</div>
 
-
-<div id="cardDiv"></div>
 
 <!--       Scripts       -->
 <!-- Bootstrap JS Bundle with Popper -->

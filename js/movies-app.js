@@ -21,27 +21,58 @@ $(function() {
         }
     }
 
+    async function getMovieInfo(id) {
+        let allMoviesData = await getAllMovies();
+        for(let movie of allMoviesData) {
+            if(movie.id === parseInt(id)) {
+                return movie;
+            }
+        }
+
+    }
+
     async function printAllMovies(moviesPromise) {
-        const cardDiv = $("#cardDiv");
+        const cardDiv = $("#cardsDiv");
         cardDiv.empty();
         moviesPromise.then(movieData => {
             movieData.forEach((movie) => {
-                cardDiv.append(`
-                    <div class="divCard" data-movie-id="${movie.id}">
-                        <h2>Title: ${movie.title.toUpperCase()}</h2>
-                        <p>Genre: ${movie.genre}</p>
-                        <img src=${movie.poster}>
-                        <p>Plot :${movie.plot}</p>
-                        <p>Director: ${movie.director}</p>
-                        <p>Actors: ${movie.actors}</p>
-                        <p>Year: ${movie.year}</p>
-                        <button class="deleteBtn">Delete Btn</button>
-                        <button class="editBtn">Edit Btn</button>
-                    </div>
-                `);
+                printMovieCard(cardDiv, movie);
             });
         });
     }
+
+    function printSingleMovieModal(modalDiv, movie) {
+
+        let modalHeaderDiv = modalDiv.children().children().children().first();
+        let modalBodyDiv = $("#singleMovie");
+        modalHeaderDiv.empty();
+        modalHeaderDiv.append(`
+            <h5 class="modal-title text-light">${movie.title}</h5>
+            <button id="modalCloseBtn" type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        `);
+        modalBodyDiv.empty();
+        modalBodyDiv.attr("data-movie-id", movie.id);
+        modalBodyDiv.append(`
+             <p>Genre: ${movie.genre}</p>
+             <p>Plot :${movie.plot}</p>
+             <p>Year: ${movie.year}</p>
+             <button class="deleteBtn">Delete Btn</button>
+             <button class="editBtn">Edit Btn</button>
+        `);
+    }
+
+    function printMovieCard(div, movie) {
+        div.append(`
+                <div class="divCard col-3" data-movie-id="${movie.id}">
+                    <div class="card">
+                        <a role="button" href="#singleMovieModal" data-bs-toggle="modal">
+                            <img src=${movie.poster} class="card-img all-movie-img">
+                        </a>
+                    </div>
+                </div>
+            `);
+    }
+
 
     async function addMovie(id) {
         // finding all movie data for movie with id
@@ -164,9 +195,9 @@ $(function() {
         $("#modalCloseBtn").trigger("click");
     });
 
-    $(document.body).on("click", ".deleteBtn", function (e){
-        e.preventDefault()
+    $(document.body).on("click", ".deleteBtn", function (){
         deleteMovie($(this).parent().attr("data-movie-id"))
+        $("#singleModalCloseBtn").trigger("click");
     })
     $(document.body).on("click", ".editBtn", function (e){
         e.preventDefault()
@@ -179,4 +210,11 @@ $(function() {
         }, 500)
     });
 
+    $(document.body).on("click", ".all-movie-img", function() {
+        getMovieInfo($(this).parent().parent().parent().attr("data-movie-id"))
+            .then(res => {
+                console.log(res);
+                printSingleMovieModal($("#singleMovieModal"), res);
+            });
+    });
 });
