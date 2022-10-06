@@ -106,7 +106,6 @@ $(function() {
             modalHeaderDiv.empty();
             modalHeaderDiv.append(`
                 <h5 class="modal-title text-light">${movie.title}</h5>
-                <button id="modalCloseBtn" type="button" class="btn-close" data-bs-dismiss="modal"></button>
             `);
             modalBodyDiv.empty();
             modalBodyDiv.attr("data-movie-id", movie.id);
@@ -121,14 +120,6 @@ $(function() {
         `);
         },
         async editModal(movie) {
-
-
-
-            // scrape what's on screen before emptying
-
-
-
-
             console.log(movie);
             console.log("inside Print.editModal. movie:");
             console.log(movie);
@@ -138,22 +129,18 @@ $(function() {
             let modalBodyDiv = $("#singleMovie");
             modalHeaderDiv.empty();
             modalHeaderDiv.append(`
-                <input class="modal-title" type="text" value="${movie.title}">
-                <button id="modalCloseBtn" type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <input id="titleInput" class="modal-title w-100" type="text" value="${movie.title}">
             `);
             modalBodyDiv.empty();
             modalBodyDiv.attr("data-movie-id", movie.id);
             modalBodyDiv.append(`
-            <label>
-             <input value="${movie.genre}">
-            </label> 
-             <input value="${movie.plot}">
-             <input value="${movie.year}">
-             <div class="d-flex justify-content-between" style="width: 100%;">
-                 <button class="saveEditBtn btn btn-primary">Save Edit</button>
-                 <button class="deleteBtn btn btn-danger">Delete Movie</button>
-             </div>
-        `);
+                 <input id="genreInput" value="${movie.genre}">
+                 <textarea id="plotInput" class="w-100" rows="9">${movie.plot}</textarea>
+                 <input id="yearInput" value="${movie.year}">
+                 <div class="d-flex justify-content-center" style="width: 100%;">
+                     <button id="saveEditBtn" class="btn btn-primary">Save Edit</button>
+                 </div>
+            `);
         },
         async moviesList(title) {
             // prints modal with movies from TMDB database
@@ -213,30 +200,26 @@ $(function() {
             Print.allMovies(Get.allMovies());
             button.removeAttr("disabled");
         },
-        async editMovie(id) {
-            // let newMovie = movie;
-            let movie = await Get.singleMovie(id);
-            // let newMovie = JSON.parse(JSON.stringify(movie));
-            let newMovie = movie;
-            Print.editModal(newMovie);
+        async editMovie(id, button) {
+            let newMovie = {
+                title: $("#titleInput").val(),
+                genre: $("#genreInput").val(),
+                plot: $("#plotInput").val(),
+                year: $("#yearInput").val()
+            }
 
             let editOptions = {
                 method: 'PATCH',
                 headers: {
                     'Content-Type' : 'application/json'
                 },
-                body : JSON.stringify(editOptions)
+                body : JSON.stringify(newMovie)
             }
 
-            // Reprint modal to have a form instead of just the information
+            let editData =await fetch(`${MovieApp.GlobalURLs.moviesURL}/${id}`, editOptions).then(results => results);
 
-
-            // add a new event listener for when the user is ready to complete the edit
-
-
-            // change the database with the new edit information
-
-
+            Print.allMovies(Get.allMovies());
+            button.removeAttr("disabled");
         }
     }
     // Utilities Object and Methods
@@ -302,6 +285,12 @@ $(function() {
             $(document.body).on("click", ".all-movie-img", function() {
                 Get.movieById($(this).parent().parent().parent().attr("data-movie-id"))
                     .then(res => Print.movieModal($("#singleMovieModal"), res));
+            });
+
+            $(document.body).on("click", "#saveEditBtn", function() {
+                User.editMovie($("#singleMovie").attr("data-movie-id"));
+                $(this).attr("disabled", "");
+                Utils.Hide.modal($("#singleMovieModal"), $(this));
             });
         },
     }
