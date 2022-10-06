@@ -6,6 +6,11 @@ $(function() {
     // const TMDB_URL =
     let allMoviesPromise;
 
+    const addMovieModal = new bootstrap.Modal('#addMovieModal', {
+        keyboard: false
+    });
+
+
     async function getAllMovies() {
         try {
             let response = await fetch(moviesURL);
@@ -106,17 +111,19 @@ $(function() {
     async function populateMoviesList(title) {
         let movieList = await searchForMovies(title).then(results => results);
         $("#moviesList").empty();
+        console.log(movieList.results[0]);
         movieList.results.forEach((movie, index) => {
             if(index < 6) {
                 $("#moviesList").append(`
                     <div class="col-2">
-                        <div class="card" data-movie-id="${movie.id}" style="height: 200px;">
-                            <h5 class="movie-list-item">${movie.title}</h5>
+                        <div class="card" data-movie-id="${movie.id}" style="height: 240px;">
+                            <img src="https://image.tmdb.org/t/p/original/${movie.poster_path}" class="card-img">
                         </div>
                     </div>
                 `);
             }
         });
+        addMovieModal.handleUpdate();
     }
 
 
@@ -143,6 +150,7 @@ $(function() {
     $("#addMovieText").keyup(e => {
         if(e.key === "Enter" || e.key === " "){
             populateMoviesList($("#addMovieText").val());
+
         }
     });
 
@@ -153,18 +161,22 @@ $(function() {
 
     $(document.body).on("click", "#moviesList .card", function() {
         addMovie($(this).attr("data-movie-id"));
+        $("#modalCloseBtn").trigger("click");
     });
 
     $(document.body).on("click", ".deleteBtn", function (e){
         e.preventDefault()
         deleteMovie($(this).parent().attr("data-movie-id"))
-
     })
     $(document.body).on("click", ".editBtn", function (e){
         e.preventDefault()
         editMovie($(this).parent().attr("data-movie-id"))
-
     })
 
+    $("#addMovieBtn").on("click", function() {
+        setTimeout(function() {
+            $("#addMovieText").focus();
+        }, 500)
+    });
 
 });
