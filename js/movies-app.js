@@ -1,18 +1,67 @@
 $(function() {
 
+    // All Global Variables stored here
+    const Global = {
+        moviesURL: "https://liberating-military-cyclone.glitch.me/movies",
+        searchTMDBURL: "https://api.themoviedb.org/3/search/movie",
+        findTMDBURL: "https://api.themoviedb.org/3/movie/"
+    }
 
-    // declare global moviesurl variable
-    const moviesURL = "https://liberating-military-cyclone.glitch.me/movies";
-    // const TMDB_URL =
-    let allMoviesPromise;
+    // Get Object with our get methods
+    const Get = {
+        async allMovies() {
 
-    // const addMovieModal = new bootstrap.Modal('#addMovieModal', {
-    //     keyboard: false
-    // });
+        },
+        async singleMovie() {
+
+        },
+        async movieById() {
+
+        },
+        async movieByTitle() {
+
+        }
+    }
+
+    // Print Object with our methods
+    const Print = {
+        async allMovies() {
+
+        },
+        async singleMovie() {
+
+        },
+        async movieModal() {
+
+        },
+        async moviesList() {
+
+        }
+    }
+
+    // User Changes to movies
+    const User = {
+        async addMovie() {
+
+        },
+        async deleteMovie() {
+
+        },
+        async editMovie() {
+
+        }
+    }
+
+    const Events = {
+        initialize() {
+
+        },
+
+    }
 
     async function getAllMovies() {
         try {
-            let response = await fetch(moviesURL);
+            let response = await fetch(Global.moviesURL);
             let data = await response.json();
             return data;
         } catch (err) {
@@ -74,7 +123,6 @@ $(function() {
             `);
     }
 
-
     async function addMovie(id) {
         // finding all movie data for movie with id
         let movieData = await findMovie(id).then(results => results);
@@ -82,7 +130,7 @@ $(function() {
             title: movieData.title,
             poster: `https://image.tmdb.org/t/p/original/${movieData.poster_path}`,
             year: movieData.release_date.substring(0,4),
-            genre: getGenres(movieData.genres),
+            genre: convertGenres(movieData.genres),
             plot: movieData.overview
         }
 
@@ -97,7 +145,7 @@ $(function() {
             body: JSON.stringify(movieToAdd)
         }
 
-        fetch(moviesURL, postOptions).then(() => {
+        fetch(Global.moviesURL, postOptions).then(() => {
             // clear text box
             $("#addMovieText").val('');
             // clear movies list
@@ -107,7 +155,7 @@ $(function() {
         });
     }
 
-    function getGenres(genreArray) {
+    function convertGenres(genreArray) {
         return genreArray.reduce((genresString, genre, index) => {
             if(index === 0){
                 return genre.name;
@@ -120,7 +168,7 @@ $(function() {
 
     async function findMovie(id){
         try {
-            let response = await fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${TMDB_KEY}`);
+            let response = await fetch(`${Global.findTMDBURL}${id}${TMDB_KEY}`);
             let data = await response.json();
             console.log(data);
             return data;
@@ -131,7 +179,7 @@ $(function() {
 
     async function searchForMovies(title) {
         try {
-            let response = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${TMDB_KEY}&query=${title}&include_adult=false`);
+            let response = await fetch(`${Global.searchTMDBURL}${TMDB_KEY}&query=${title}&include_adult=false`);
             let data = await response.json();
             console.log(data);
             return data;
@@ -166,7 +214,7 @@ $(function() {
                 'Content-Type' : 'application/json'
             }
         }
-        let deleteData = await fetch(`${moviesURL}/${id}`, deleteOptions).then(results => results);
+        let deleteData = await fetch(`${Global.moviesURL}/${id}`, deleteOptions).then(results => results);
         printAllMovies(getAllMovies());
         button.removeAttr("disabled");
     }
@@ -183,7 +231,6 @@ $(function() {
     $("#addMovieText").keyup(e => {
         if(e.key === "Enter" || e.key === " "){
             populateMoviesList($("#addMovieText").val());
-
         }
     });
 

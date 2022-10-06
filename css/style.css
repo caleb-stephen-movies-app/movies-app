@@ -2,6 +2,6 @@ body {
     background-color: #8096AD;
 }
 
-/*.all-movie-img {*/
-/*    cursor: pointer;*/
-/*}*/
+#moviesList img {
+    cursor: pointer;
+}
