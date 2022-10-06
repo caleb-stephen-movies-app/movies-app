@@ -182,6 +182,14 @@ $(function() {
             button.removeAttr("disabled");
         },
         async editMovie() {
+            // Reprint modal to have a form instead of just the information
+
+
+            // add a new event listener for when the user is ready to complete the edit
+
+
+            // change the database with the new edit information
+
 
         }
     }
