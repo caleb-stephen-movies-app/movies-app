@@ -25,22 +25,48 @@ $(function() {
         const cardDiv = $("#cardDiv");
         cardDiv.empty();
         moviesPromise.then(movieData => {
-            movieData.forEach((movie) => {
-                cardDiv.append(`
-                    <div class="divCard" data-movie-id="${movie.id}">
-                        <h2>Title: ${movie.title.toUpperCase()}</h2>
-                        <p>Genre: ${movie.genre}</p>
-                        <img src=${movie.poster}>
-                        <p>Plot :${movie.plot}</p>
-                        <p>Director: ${movie.director}</p>
-                        <p>Actors: ${movie.actors}</p>
-                        <p>Year: ${movie.year}</p>
-                        <button class="deleteBtn">Delete Btn</button>
-                        <button class="editBtn">Edit Btn</button>
-                    </div>
-                `);
+            movieData.forEach((movie, index) => {
+                // cardDiv.append(`
+                //     <div class="divCard" data-movie-id="${movie.id}">
+                //         <h2>Title: ${movie.title.toUpperCase()}</h2>
+                //         <p>Genre: ${movie.genre}</p>
+                //         <img src=${movie.poster}>
+                //         <p>Plot :${movie.plot}</p>
+                //         <p>Director: ${movie.director}</p>
+                //         <p>Actors: ${movie.actors}</p>
+                //         <p>Year: ${movie.year}</p>
+                //         <button class="deleteBtn">Delete Btn</button>
+                //         <button class="editBtn">Edit Btn</button>
+                //     </div>
+                // `);
+                if(index === 0){
+                    cardDiv.append(`${printAllMovieWrapperActive(movie)}`);
+                } else {
+                    cardDiv.append(`${printAllMovieWrapperAll(movie)}`);
+                }
+                cardDiv.append(`${printAllMoviesContent(movie)}`);
             });
         });
+    }
+
+    function printAllMovieWrapperActive(movie) {
+        console.log("inside printallmoviewrapperactive");
+        return `
+            <div class="carousel-item active" data-movie-id="${movie.id}">
+        `;
+    }
+
+    function printAllMovieWrapperAll(movie) {
+        console.log("this should show a lot")
+        return `
+            <div class="carousel-item" data-movie-id="${movie.id}">
+        `;
+    }
+
+    function printAllMoviesContent(movie) {
+        return `
+            <img src="${movie.poster}" class="d-block w-100">
+        `;
     }
 
     async function addMovie(id) {
