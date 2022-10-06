@@ -6,10 +6,9 @@ $(function() {
     // const TMDB_URL =
     let allMoviesPromise;
 
-    const addMovieModal = new bootstrap.Modal('#addMovieModal', {
-        keyboard: false
-    });
-
+    // const addMovieModal = new bootstrap.Modal('#addMovieModal', {
+    //     keyboard: false
+    // });
 
     async function getAllMovies() {
         try {
@@ -56,17 +55,19 @@ $(function() {
              <p>Genre: ${movie.genre}</p>
              <p>Plot :${movie.plot}</p>
              <p>Year: ${movie.year}</p>
-             <button class="deleteBtn">Delete Btn</button>
-             <button class="editBtn">Edit Btn</button>
+             <div class="d-flex justify-content-between" style="width: 100%;">
+                 <button class="editBtn btn btn-primary">Edit Movie</button>
+                 <button class="deleteBtn btn btn-danger">Delete Movie</button>
+             </div>
         `);
     }
 
     function printMovieCard(div, movie) {
         div.append(`
                 <div class="divCard col-3" data-movie-id="${movie.id}">
-                    <div class="card">
+                    <div class="card" style="border-radius: 2em; overflow: hidden;">
                         <a role="button" href="#singleMovieModal" data-bs-toggle="modal">
-                            <img src=${movie.poster} class="card-img all-movie-img">
+                            <img src=${movie.poster} class="card-img all-movie-img" style="height: 429px;">
                         </a>
                     </div>
                 </div>
@@ -148,7 +149,7 @@ $(function() {
                 $("#moviesList").append(`
                     <div class="col-2">
                         <div class="card" data-movie-id="${movie.id}" style="height: 240px;">
-                            <img src="https://image.tmdb.org/t/p/original/${movie.poster_path}" class="card-img">
+                            <img src="https://image.tmdb.org/t/p/original/${movie.poster_path}" class="card-img" style="height: 240px;">
                         </div>
                     </div>
                 `);
@@ -158,7 +159,7 @@ $(function() {
     }
 
 
-    async function deleteMovie(id){
+    async function deleteMovie(id, button){
         let deleteOptions = {
             method: 'DELETE',
             headers: {
@@ -167,6 +168,7 @@ $(function() {
         }
         let deleteData = await fetch(`${moviesURL}/${id}`, deleteOptions).then(results => results);
         printAllMovies(getAllMovies());
+        button.removeAttr("disabled");
     }
     // <option className="movie-list-item" data-movie-id="${movie.id}">${movie.original_title}</option>
 
@@ -196,25 +198,23 @@ $(function() {
     });
 
     $(document.body).on("click", ".deleteBtn", function (){
-        deleteMovie($(this).parent().attr("data-movie-id"))
+        $(this).attr("disabled", "");
+        deleteMovie($(this).parent().parent().attr("data-movie-id"), $(this));
         $("#singleModalCloseBtn").trigger("click");
     })
-    $(document.body).on("click", ".editBtn", function (e){
-        e.preventDefault()
-        editMovie($(this).parent().attr("data-movie-id"))
+    $(document.body).on("click", ".editBtn", function (){
+        $(this).attr("disabled", "");
+        editMovie($(this).parent().attr("data-movie-id"));
     })
 
     $("#addMovieBtn").on("click", function() {
         setTimeout(function() {
             $("#addMovieText").focus();
-        }, 500)
+        }, 500);
     });
 
     $(document.body).on("click", ".all-movie-img", function() {
         getMovieInfo($(this).parent().parent().parent().attr("data-movie-id"))
-            .then(res => {
-                console.log(res);
-                printSingleMovieModal($("#singleMovieModal"), res);
-            });
+            .then(res => printSingleMovieModal($("#singleMovieModal"), res));
     });
 });
