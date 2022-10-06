@@ -119,6 +119,30 @@ $(function() {
              </div>
         `);
         },
+        async editModal(movie) {
+            // prints the movie modal from our database
+            // contains movie info with no image
+            let modalHeaderDiv = $("#singleMovieModalHeader");
+            let modalBodyDiv = $("#singleMovie");
+            modalHeaderDiv.empty();
+            modalHeaderDiv.append(`
+                <input class="modal-title text-light" value="${movie.title}"></input>
+                <button id="modalCloseBtn" type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            `);
+            modalBodyDiv.empty();
+            modalBodyDiv.attr("data-movie-id", movie.id);
+            modalBodyDiv.append(`
+            <label>
+             <input value="${movie.genre}">
+            </label> 
+             <input value="${movie.plot}">
+             <input value="${movie.year}">
+             <div class="d-flex justify-content-between" style="width: 100%;">
+                 <button class="editBtn btn btn-primary">Edit Movie</button>
+                 <button class="deleteBtn btn btn-danger">Delete Movie</button>
+             </div>
+        `);
+        },
         async moviesList(title) {
             // prints modal with movies from TMDB database
             // shows the top 6 from search results
@@ -181,7 +205,15 @@ $(function() {
             Print.allMovies(Get.allMovies());
             button.removeAttr("disabled");
         },
-        async editMovie() {
+        async editMovie(id) {
+            let editOptions = {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type' : 'application/json'
+                },
+                body : JSON.stringify(editOptions)
+            }
+            Print.editModal()
             // Reprint modal to have a form instead of just the information
 
 
@@ -241,7 +273,7 @@ $(function() {
             })
             $(document.body).on("click", ".editBtn", function (){
                 $(this).attr("disabled", "");
-                User.editMovie($(this).parent().attr("data-movie-id"));
+                User.editMovie($(this).parent().parent().attr("data-movie-id"));
             })
 
             $("#addMovieBtn").on("click", function() {
