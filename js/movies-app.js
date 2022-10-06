@@ -3,6 +3,7 @@ $(function() {
 
     // declare global moviesurl variable
     const moviesURL = "https://liberating-military-cyclone.glitch.me/movies";
+    // const TMDB_URL =
     let allMoviesPromise;
 
     async function getAllMovies() {
@@ -83,6 +84,7 @@ $(function() {
         try {
             let response = await fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${TMDB_KEY}`);
             let data = await response.json();
+            console.log(data);
             return data;
         } catch(err) {
             console.log(err);
@@ -93,6 +95,7 @@ $(function() {
         try {
             let response = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${TMDB_KEY}&query=${title}&include_adult=false`);
             let data = await response.json();
+            console.log(data);
             return data;
         } catch(err) {
             console.log(err);
