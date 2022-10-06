@@ -28,13 +28,14 @@ $(function() {
         },
         async singleMovie(id) {
             // finding all movie data needed for our database with TMDB id
-            let movieData = await Get.tmbdMovieById(id).then(results => results);
+            let movieData = await Get.tmbdMovieById(id);
             let movieToAdd = {
                 title: movieData.title,
                 poster: `https://image.tmdb.org/t/p/original/${movieData.poster_path}`,
                 year: movieData.release_date.substring(0,4),
                 genre: Utils.Convert.genreArrayToString(movieData.genres),
-                plot: movieData.overview
+                plot: movieData.overview,
+                tmdbId: movieData.id
             }
             // returns movie object that matches the information stored in our project
             return movieToAdd;
@@ -120,13 +121,24 @@ $(function() {
         `);
         },
         async editModal(movie) {
+
+
+
+            // scrape what's on screen before emptying
+
+
+
+
+            console.log(movie);
+            console.log("inside Print.editModal. movie:");
+            console.log(movie);
             // prints the movie modal from our database
             // contains movie info with no image
             let modalHeaderDiv = $("#singleMovieModalHeader");
             let modalBodyDiv = $("#singleMovie");
             modalHeaderDiv.empty();
             modalHeaderDiv.append(`
-                <input class="modal-title text-light" value="${movie.title}"></input>
+                <input class="modal-title" type="text" value="${movie.title}">
                 <button id="modalCloseBtn" type="button" class="btn-close" data-bs-dismiss="modal"></button>
             `);
             modalBodyDiv.empty();
@@ -138,7 +150,7 @@ $(function() {
              <input value="${movie.plot}">
              <input value="${movie.year}">
              <div class="d-flex justify-content-between" style="width: 100%;">
-                 <button class="editBtn btn btn-primary">Edit Movie</button>
+                 <button class="saveEditBtn btn btn-primary">Save Edit</button>
                  <button class="deleteBtn btn btn-danger">Delete Movie</button>
              </div>
         `);
@@ -152,7 +164,7 @@ $(function() {
                 if(index < 6) {
                     $("#moviesList").append(`
                     <div class="col-2">
-                        <div class="card" data-movie-id="${movie.id}" style="height: 240px;">
+                        <div class="card" data-tmdb-id="${movie.tmdbId}" data-movie-id="${movie.id}" style="height: 240px;">
                             <img src="https://image.tmdb.org/t/p/original/${movie.poster_path}" class="card-img" style="height: 240px;">
                         </div>
                     </div>
@@ -162,7 +174,7 @@ $(function() {
         },
         addMovie(movie) {
             $("#cardsDiv").prepend(`
-                <div class="divCard col-3" data-movie-id="${movie.id}">
+                <div class="divCard col-3" data-tmdb-id="${movie.tmdbId}" data-movie-id="${movie.id}">
                     <div class="card" style="border-radius: 2em; overflow: hidden;">
                         <a role="button" href="#singleMovieModal" data-bs-toggle="modal">
                             <img src=${movie.poster} class="card-img all-movie-img" style="height: 429px;">
@@ -175,8 +187,7 @@ $(function() {
     // User Object and Methods
     const User = {
         async addMovie(id) {
-
-            let movie = await Get.singleMovie(id)
+            let movie = await Get.singleMovie(id);
             const postOptions = {
                 method: 'POST',
                 headers: {
@@ -184,14 +195,11 @@ $(function() {
                 },
                 body: JSON.stringify(movie)
             }
-
             fetch(MovieApp.GlobalURLs.moviesURL, postOptions).then(() => {
-                // clear text box
                 $("#addMovieText").val('');
-                // clear movies list
                 $("#moviesList").empty();
-                // reprint all movies
-                Print.addMovie(movie);
+                // Print.addMovie(movie);
+                Print.allMovies(Get.allMovies());
             });
         },
         async deleteMovie(id, button) {
@@ -206,6 +214,12 @@ $(function() {
             button.removeAttr("disabled");
         },
         async editMovie(id) {
+            // let newMovie = movie;
+            let movie = await Get.singleMovie(id);
+            // let newMovie = JSON.parse(JSON.stringify(movie));
+            let newMovie = movie;
+            Print.editModal(newMovie);
+
             let editOptions = {
                 method: 'PATCH',
                 headers: {
@@ -213,7 +227,7 @@ $(function() {
                 },
                 body : JSON.stringify(editOptions)
             }
-            Print.editModal()
+
             // Reprint modal to have a form instead of just the information
 
 
@@ -273,7 +287,10 @@ $(function() {
             })
             $(document.body).on("click", ".editBtn", function (){
                 $(this).attr("disabled", "");
-                User.editMovie($(this).parent().parent().attr("data-movie-id"));
+                console.log($(this).parent().parent().attr("data-movie-id"));
+                Get.movieById($(this).parent().parent().attr("data-movie-id"))
+                    .then(res => Print.editModal(res));
+
             })
 
             $("#addMovieBtn").on("click", function() {
@@ -283,7 +300,6 @@ $(function() {
             });
 
             $(document.body).on("click", ".all-movie-img", function() {
-                console.log($(this).parent().parent().parent().attr("data-movie-id"));
                 Get.movieById($(this).parent().parent().parent().attr("data-movie-id"))
                     .then(res => Print.movieModal($("#singleMovieModal"), res));
             });
