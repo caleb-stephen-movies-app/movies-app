@@ -2,7 +2,7 @@ body {
     background-color: #8096AD;
 }
 
-#moviesList img {
+#movie-list img {
     cursor: pointer;
 }
 

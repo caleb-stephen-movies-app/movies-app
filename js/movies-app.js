@@ -2,38 +2,47 @@ $(function() {
 
     // MovieApp Object and Methods
     const MovieApp = {
+        // Storing all the URL const variablers
         GlobalURLs: {
-            // Storing all the URL const variablers
             moviesURL: "https://liberating-military-cyclone.glitch.me/movies",
             searchTMDBURL: "https://api.themoviedb.org/3/search/movie",
             findTMDBURL: "https://api.themoviedb.org/3/movie/"
         },
+        // Paths for NSFW search results from TMDB
         TMDBPaths: {
             sfw: "&include_adult=false",
             nsfw: "&include_adult=true"
         },
+        // Prints current movie database on screen and initializes all event listeners
         initialize() {
-            // Prints current movie database on screen and initializes all event listeners
+            // setTimeout just to show the loading screen for more than a split second. It can be removed for production
             // setTimeout(() => {
                 Print.allMovies(Get.allMovies());
             // }, 5000);
             Events.initialize();
         },
+        // String that holds user input for secret code
         hiddenString: "",
+        // Function to change TMDB search to allow adult results
         enterBackRoom() {
             User.overEighteen = true;
+            // Changes background of page to represent that the user is in NSFW mode
             $("#page-wrapper").toggleClass("normal-bg back-room-bg");
+            // Setting back room timer to 30 seconds
             let backRoomTimer = 30;
             $("#back-room-timer").html(`0.${backRoomTimer.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}`);
+            // Decrementing timer every second
             let intervalId = setInterval(() => {
                 backRoomTimer--;
                 $("#back-room-timer").html(`0.${backRoomTimer.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}`);
             }, 1000);
+            // After 30 seconds runs function to turn off NSFW mode
             setTimeout(() => {
                 MovieApp.leaveBackRoom()
                 clearInterval(intervalId);
             }, 30000);
         },
+        // Sets TMDB search back to SFW
         leaveBackRoom() {
             User.overEighteen = false;
             $("#page-wrapper").toggleClass("normal-bg back-room-bg");
@@ -42,8 +51,8 @@ $(function() {
     }
     // Get Object and Methods
     const Get = {
+        // Gets all movies from our database
         async allMovies() {
-            // Gets all movies from our database
             try {
                 let response = await fetch(MovieApp.GlobalURLs.moviesURL);
                 let data = await response.json();
@@ -52,9 +61,11 @@ $(function() {
                 console.log(err);
             }
         },
-        async singleMovie(id) {
-            // finding all movie data needed for our database with TMDB id
-            let movieData = await Get.tmbdMovieById(id);
+        // Gets only the data we need for our database from the TMDB database from the TMDB id input
+        async scrapeSingleMovieData(tmdbId) {
+            // Receives the full TMDB data
+            let movieData = await Get.tmbdMovieById(tmdbId);
+            // Scrapes necessary movie data
             let movieToAdd = {
                 title: movieData.title,
                 poster: `https://image.tmdb.org/t/p/original/${movieData.poster_path}`,
@@ -66,8 +77,8 @@ $(function() {
             // returns movie object that matches the information stored in our project
             return movieToAdd;
         },
+        // finds and returns movie data for movie in our database
         async movieById(id) {
-            // finds and returns movie data for movie in our database
             let allMoviesData = await this.allMovies();
             for(let movie of allMoviesData) {
                 if(movie.id === parseInt(id)) {
@@ -75,8 +86,8 @@ $(function() {
                 }
             }
         },
+        // finds movie from TMDB database
         async tmbdMovieById(id) {
-            // finds movie from TMDB database
             // uses TMDB id
             // returns data inside a promise
             try {
@@ -87,8 +98,8 @@ $(function() {
                 console.log(err);
             }
         },
+        // finds movies from TMDB database
         async movieByTitle(title) {
-            // finds movies from TMDB database
             // inputs string with movie title
             // returns data array inside a promise
             try {
@@ -102,10 +113,11 @@ $(function() {
     }
     // Print Object and Methods
     const Print = {
+        // Prints all movies onto screen
         async allMovies(dataPromise) {
             $("#loading-div").removeClass("d-none");
             // prints all movies in our database on screen
-            const cardDiv = $("#cardsDiv");
+            const cardDiv = $("#cards-div");
             cardDiv.empty();
             dataPromise.then(movieData => {
                 movieData.forEach((movie) => {
@@ -114,23 +126,23 @@ $(function() {
                 $("#loading-div").addClass("d-none");
             });
         },
+        // prints single movie card from our database to be inserted into the all movies list
         async singleMovie(div, movie) {
-            // prints single movie card from our database to be inserted into the all movies list
-            div.append(`
-                <div class="divCard col-3" data-movie-id="${movie.id}">
+            div.prepend(`
+                <div class="div-card col-3" data-movie-id="${movie.id}">
                     <div class="card movie-card">
-                        <a role="button" href="#singleMovieModal" data-bs-toggle="modal">
+                        <a role="button" href="#single-movie-modal" data-bs-toggle="modal">
                             <img src=${movie.poster} class="card-img all-movie-img">
                         </a>
                     </div>
                 </div>
             `);
         },
+        // prints the movie modal from our database
         async movieModal(div, movie) {
-            // prints the movie modal from our database
             // contains movie info with no image
-            let modalHeaderDiv = $("#singleMovieModalHeader");
-            let modalBodyDiv = $("#singleMovie");
+            let modalHeaderDiv = $("#single-movie-modal-header");
+            let modalBodyDiv = $("#single-movie");
             modalHeaderDiv.empty();
             modalHeaderDiv.append(`
                 <h5 class="modal-title text-light">${movie.title}</h5>
@@ -142,68 +154,57 @@ $(function() {
              <p>Plot :${movie.plot}</p>
              <p>Year: ${movie.year}</p>
              <div class="d-flex justify-content-between">
-                 <button class="editBtn btn btn-primary">Edit Movie</button>
-                 <button class="deleteBtn btn btn-danger">Delete Movie</button>
+                 <button class="edit-btn btn btn-primary">Edit Movie</button>
+                 <button class="delete-btn btn btn-danger">Delete Movie</button>
              </div>
         `);
         },
+        // Prints movie modal from our database with text fields for user to edit
         async editModal(movie) {
-            console.log(movie);
-            console.log("inside Print.editModal. movie:");
-            console.log(movie);
             // prints the movie modal from our database
             // contains movie info with no image
-            let modalHeaderDiv = $("#singleMovieModalHeader");
-            let modalBodyDiv = $("#singleMovie");
+            let modalHeaderDiv = $("#single-movie-modal-header");
+            let modalBodyDiv = $("#single-movie");
             modalHeaderDiv.empty();
             modalHeaderDiv.append(`
-                <input id="titleInput" class="modal-title w-100" type="text" value="${movie.title}">
+                <input id="title-input" class="modal-title w-100" type="text" value="${movie.title}">
             `);
             modalBodyDiv.empty();
             modalBodyDiv.attr("data-movie-id", movie.id);
             modalBodyDiv.append(`
-                 <input id="genreInput" value="${movie.genre}">
-                 <textarea id="plotInput" class="w-100" rows="9">${movie.plot}</textarea>
-                 <input id="yearInput" value="${movie.year}">
+                 <input id="genre-input" value="${movie.genre}">
+                 <textarea id="plot-input" class="w-100" rows="9">${movie.plot}</textarea>
+                 <input id="year-input" value="${movie.year}">
                  <div class="d-flex justify-content-center">
-                     <button id="saveEditBtn" class="btn btn-primary">Save Edit</button>
+                     <button id="save-edit-btn" class="btn btn-primary">Save Edit</button>
                  </div>
             `);
         },
+        // prints modal with movies from TMDB database
         async moviesList(title) {
-            // prints modal with movies from TMDB database
             // shows the top 6 from search results
             let movieList = await Get.movieByTitle(title).then(results => results);
-            $("#moviesList").empty();
+            $("#movie-list").empty();
             movieList.results.forEach((movie, index) => {
                 if(index < 6) {
-                    $("#moviesList").append(`
+                    $("#movie-list").append(`
                     <div class="col-2">
-                        <div class="card search-card" data-tmdb-id="${movie.tmdbId}" data-movie-id="${movie.id}">
+                        <div class="card search-card" data-movie-tmdb-id="${movie.id}">
                             <img src="https://image.tmdb.org/t/p/original/${movie.poster_path}" class="card-img search-card-img">
                         </div>
                     </div>
                 `);
                 }
             });
-        },
-        addMovie(movie) {
-            $("#cardsDiv").prepend(`
-                <div class="divCard col-3" data-tmdb-id="${movie.tmdbId}" data-movie-id="${movie.id}">
-                    <div class="card movie-card">
-                        <a role="button" href="#singleMovieModal" data-bs-toggle="modal">
-                            <img src=${movie.poster} class="card-img all-movie-img">
-                        </a>
-                    </div>
-                </div>
-            `);
         }
     }
     // User Object and Methods
     const User = {
+        // Property to hold value to see if NSFW search is active
         overEighteen: false,
-        async addMovie(id) {
-            let movie = await Get.singleMovie(id);
+        // Adds movie to database
+        async addMovie(tmdbId) {
+            let movie = await Get.scrapeSingleMovieData(tmdbId);
             const postOptions = {
                 method: 'POST',
                 headers: {
@@ -212,12 +213,13 @@ $(function() {
                 body: JSON.stringify(movie)
             }
             fetch(MovieApp.GlobalURLs.moviesURL, postOptions).then(() => {
-                $("#addMovieText").val('');
-                $("#moviesList").empty();
+                $("#add-movie-text").val('');
+                $("#movie-list").empty();
                 // Print.addMovie(movie);
                 Print.allMovies(Get.allMovies());
             });
         },
+        // Deletes movie from database
         async deleteMovie(id, button) {
             let deleteOptions = {
                 method: 'DELETE',
@@ -229,12 +231,13 @@ $(function() {
             Print.allMovies(Get.allMovies());
             button.removeAttr("disabled");
         },
+        // Edits movie in database
         async editMovie(id, button) {
             let newMovie = {
-                title: $("#titleInput").val(),
-                genre: $("#genreInput").val(),
-                plot: $("#plotInput").val(),
-                year: $("#yearInput").val()
+                title: $("#title-input").val(),
+                genre: $("#genre-input").val(),
+                plot: $("#plot-input").val(),
+                year: $("#year-input").val()
             }
 
             let editOptions = {
@@ -253,7 +256,9 @@ $(function() {
     }
     // Utilities Object and Methods
     const Utils = {
+        // Convert methods
         Convert: {
+            // Converts genre array to string to store in our database
             genreArrayToString(genreArray) {
                 return genreArray.reduce((genresString, genre, index) => {
                     if(index === 0){
@@ -264,7 +269,9 @@ $(function() {
                 }, '');
             }
         },
+        // Hide methods
         Hide: {
+            // Hides modal
             modal(modal) {
                 bootstrap.Modal.getInstance(modal).hide();
             }
@@ -273,55 +280,51 @@ $(function() {
     }
     // Events Object and Methods
     const Events = {
+        // Initializes all event listeners
         initialize() {
-            // update movieList on space and enter
-            $("#addMovieText").keyup(e => {
+            // Listens for keyup in the add movie text input
+            $("#add-movie-text").keyup(e => {
                 if(e.key === "Enter" || e.key === " "){
-                    Print.moviesList($("#addMovieText").val());
+                    Print.moviesList($("#add-movie-text").val());
                 }
             });
-            // update movieList on keyup
-            // $("#addMovieText").keyup(e => {
-            //     populateMoviesList($("#addMovieText").val())
-            // });
-
-            $(document.body).on("click", "#moviesList .card", function() {
-                console.log("User added a movie");
-                User.addMovie($(this).attr("data-movie-id"));
-                Utils.Hide.modal($("#addMovieModal"));
+            // Listens for click on add movie card
+            $(document.body).on("click", "#movie-list .card", function() {
+                User.addMovie($(this).attr("data-movie-tmdb-id"));
+                Utils.Hide.modal($("#add-movie-modal"));
             });
-
-            $(document.body).on("click", ".deleteBtn", function (){
+            // Listens for click on delete button
+            $(document.body).on("click", ".delete-btn", function (){
                 $(this).attr("disabled", "");
                 User.deleteMovie($(this).parent().parent().attr("data-movie-id"), $(this));
-                Utils.Hide.modal($("#singleMovieModal"));
+                Utils.Hide.modal($("#single-movie-modal"));
             })
-            $(document.body).on("click", ".editBtn", function (){
+            // Listens for click of edit button
+            $(document.body).on("click", ".edit-btn", function (){
                 $(this).attr("disabled", "");
-                console.log($(this).parent().parent().attr("data-movie-id"));
                 Get.movieById($(this).parent().parent().attr("data-movie-id"))
                     .then(res => Print.editModal(res));
-
             })
-
-            $("#addMovieBtn").on("click", function() {
-                $("#addMovieText").val("");
-                $("#moviesList").html("");
+            // Listens for click of add button
+            $("#add-movie-btn").on("click", function() {
+                $("#add-movie-text").val("").text("");
+                $("#movie-list").html("");
                 setTimeout(function() {
-                    $("#addMovieText").focus();
+                    $("#add-movie-text").focus();
                 }, 500);
             });
-
+            // Listens for click of any image of our full movie list
             $(document.body).on("click", ".all-movie-img", function() {
                 Get.movieById($(this).parent().parent().parent().attr("data-movie-id"))
-                    .then(res => Print.movieModal($("#singleMovieModal"), res));
+                    .then(res => Print.movieModal($("#single-movie-modal"), res));
             });
-
-            $(document.body).on("click", "#saveEditBtn", function() {
-                User.editMovie($("#singleMovie").attr("data-movie-id"));
+            // Listens for click of the save edit button
+            $(document.body).on("click", "#save-edit-btn", function() {
+                User.editMovie($("#single-movie").attr("data-movie-id"));
                 $(this).attr("disabled", "");
-                Utils.Hide.modal($("#singleMovieModal"), $(this));
+                Utils.Hide.modal($("#single-movie-modal"), $(this));
             });
+            // Listens for any keyup on the screen
             $("body").on("keyup", function(e) {
                 if(e.key === "Enter") {
                     MovieApp.hiddenString = "";
@@ -332,7 +335,7 @@ $(function() {
                     MovieApp.enterBackRoom();
                 }
             })
-        },
+        }
     }
 
     // Initialize MovieApp
