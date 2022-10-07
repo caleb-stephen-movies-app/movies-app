@@ -14,7 +14,9 @@ $(function() {
         },
         initialize() {
             // Prints current movie database on screen and initializes all event listeners
-            Print.allMovies(Get.allMovies());
+            setTimeout(() => {
+                Print.allMovies(Get.allMovies());
+            }, 5000);
             Events.initialize();
         },
         hiddenString: "",
@@ -101,6 +103,7 @@ $(function() {
     // Print Object and Methods
     const Print = {
         async allMovies(dataPromise) {
+            $("#loading-div").removeClass("d-none");
             // prints all movies in our database on screen
             const cardDiv = $("#cardsDiv");
             cardDiv.empty();
@@ -108,6 +111,7 @@ $(function() {
                 movieData.forEach((movie) => {
                     Print.singleMovie(cardDiv, movie);
                 });
+                $("#loading-div").addClass("d-none");
             });
         },
         async singleMovie(div, movie) {
