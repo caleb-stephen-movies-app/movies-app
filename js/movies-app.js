@@ -1,3 +1,4 @@
+// Initialize jQuery
 $(function() {
 
     // MovieApp Object and Methods
@@ -13,16 +14,16 @@ $(function() {
             sfw: "&include_adult=false",
             nsfw: "&include_adult=true"
         },
+        // String that holds user input for secret code
+        hiddenString: "",
         // Prints current movie database on screen and initializes all event listeners
         initialize() {
             // setTimeout just to show the loading screen for more than a split second. It can be removed for production
             // setTimeout(() => {
-                Print.allMovies(Get.allMovies());
+            Print.allMovies(Get.allMovies());
             // }, 5000);
             Events.initialize();
         },
-        // String that holds user input for secret code
-        hiddenString: "",
         // Function to change TMDB search to allow adult results
         enterBackRoom() {
             User.overEighteen = true;
