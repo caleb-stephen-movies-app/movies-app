@@ -1,7 +1,11 @@
-body {
+#moviesList img {
+    cursor: pointer;
+}
+
+.normal-bg {
     background-color: #8096AD;
 }
 
-#moviesList img {
-    cursor: pointer;
+.back-room-bg {
+    background-color: #622929;
 }

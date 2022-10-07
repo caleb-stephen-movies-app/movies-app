@@ -16,53 +16,55 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+<div id="page-wrapper" class="normal-bg">
+    <!--Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark text-light sticky-top">
+        <div class="container-fluid d-flex justify-content-between">
+            <h2 id="header-title" class="nav-item mx-3">
+                <a id="addMovieBtn" role="button" href="#addMovieModal" class="nav-link" data-bs-toggle="modal">
+                    Add Movie
+                </a>
+            </h2>
+            <h3 id="back-room-timer"></h3>
+        </div>
+    </nav>
 
-<!--Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark text-light sticky-top">
-    <div class="container-fluid">
-        <h2 id="header-title" class="nav-item mx-3">
-            <a id="addMovieBtn" role="button" href="#addMovieModal" class="nav-link" data-bs-toggle="modal">
-                Add Movie
-            </a>
-        </h2>
-    </div>
-</nav>
-
-<!-- Add Movie Modal -->
-<div class="modal fade" id="addMovieModal" tabindex="-1">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content bg-dark">
-            <div class="modal-header">
-                <h5 class="modal-title text-light">Add Movie</h5>
-            </div>
-            <div class="modal-body text-center">
-                <input type="text" id="addMovieText" list="moviesList" class="w-75" autocomplete="off">
-                <div class="container mt-3">
-                    <div id="moviesList" class="row"></div>
+    <!-- Add Movie Modal -->
+    <div class="modal fade" id="addMovieModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content bg-dark">
+                <div class="modal-header">
+                    <h5 class="modal-title text-light">Add Movie</h5>
+                </div>
+                <div class="modal-body text-center">
+                    <input type="text" id="addMovieText" list="moviesList" class="w-75" autocomplete="off">
+                    <div class="container mt-3">
+                        <div id="moviesList" class="row"></div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Single Movie Modal -->
-<div class="modal fade" id="singleMovieModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content bg-dark">
-            <div id="singleMovieModalHeader" class="modal-header">
-            </div>
-            <div class="modal-body text-light">
-                <div class="container mt-3">
-                    <div id="singleMovie" class="row"></div>
+    <!-- Single Movie Modal -->
+    <div class="modal fade" id="singleMovieModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content bg-dark">
+                <div id="singleMovieModalHeader" class="modal-header">
+                </div>
+                <div class="modal-body text-light">
+                    <div class="container mt-3">
+                        <div id="singleMovie" class="row"></div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<!--All Movie Cards-->
-<div class="container my-3">
-    <div id="cardsDiv" class="row g-5"></div>
+    <!--All Movie Cards-->
+    <div class="container my-3">
+        <div id="cardsDiv" class="row g-5"></div>
+    </div>
 </div>
 
 

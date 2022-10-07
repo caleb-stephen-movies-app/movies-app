@@ -8,10 +8,34 @@ $(function() {
             searchTMDBURL: "https://api.themoviedb.org/3/search/movie",
             findTMDBURL: "https://api.themoviedb.org/3/movie/"
         },
+        TMDBPaths: {
+            sfw: "&include_adult=false",
+            nsfw: "&include_adult=true"
+        },
         initialize() {
             // Prints current movie database on screen and initializes all event listeners
             Print.allMovies(Get.allMovies());
             Events.initialize();
+        },
+        hiddenString: "",
+        enterBackRoom() {
+            User.overEighteen = true;
+            $("#page-wrapper").toggleClass("normal-bg back-room-bg");
+            let backRoomTimer = 30;
+            $("#back-room-timer").html(`0.${backRoomTimer.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}`);
+            let intervalId = setInterval(() => {
+                backRoomTimer--;
+                $("#back-room-timer").html(`0.${backRoomTimer.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}`);
+            }, 1000);
+            setTimeout(() => {
+                MovieApp.leaveBackRoom()
+                clearInterval(intervalId);
+            }, 30000);
+        },
+        leaveBackRoom() {
+            User.overEighteen = false;
+            $("#page-wrapper").toggleClass("normal-bg back-room-bg");
+            $("#back-room-timer").html("");
         }
     }
     // Get Object and Methods
@@ -66,7 +90,7 @@ $(function() {
             // inputs string with movie title
             // returns data array inside a promise
             try {
-                let response = await fetch(`${MovieApp.GlobalURLs.searchTMDBURL}${TMDB_KEY}&query=${title}&include_adult=false`);
+                let response = await fetch(`${MovieApp.GlobalURLs.searchTMDBURL}${TMDB_KEY}&query=${title}${User.overEighteen? MovieApp.TMDBPaths.nsfw : MovieApp.TMDBPaths.sfw}`);
                 let data = await response.json();
                 return data;
             } catch(err) {
@@ -173,6 +197,7 @@ $(function() {
     }
     // User Object and Methods
     const User = {
+        overEighteen: false,
         async addMovie(id) {
             let movie = await Get.singleMovie(id);
             const postOptions = {
@@ -251,7 +276,6 @@ $(function() {
                     Print.moviesList($("#addMovieText").val());
                 }
             });
-
             // update movieList on keyup
             // $("#addMovieText").keyup(e => {
             //     populateMoviesList($("#addMovieText").val())
@@ -292,6 +316,16 @@ $(function() {
                 $(this).attr("disabled", "");
                 Utils.Hide.modal($("#singleMovieModal"), $(this));
             });
+            $("body").on("keyup", function(e) {
+                if(e.key === "Enter") {
+                    MovieApp.hiddenString = "";
+                } else {
+                    MovieApp.hiddenString += e.key;
+                }
+                if(!User.overEighteen && MovieApp.hiddenString.toUpperCase().includes(BACK_ROOM)) {
+                    MovieApp.enterBackRoom();
+                }
+            })
         },
     }
 
