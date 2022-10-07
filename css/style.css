@@ -70,6 +70,10 @@ body {
     cursor: pointer;
 }
 
+.modal-content {
+    border-radius: 1.5em;
+}
+
 /*Stying sort select element*/
 #sort-select, #sort-select>option, #add-movie-btn {
     background-color: #8096AD;
@@ -91,7 +95,7 @@ body {
     box-shadow: 6px 12px 12px #254895;
 }
 .search-card {
-    box-shadow: 0 0 6px 6px #8096AD;
+    box-shadow: 0 0 3px 3px #8096AD;
     border-radius: 1em;
     overflow: hidden;
 }
