@@ -1,3 +1,8 @@
+/*Normal background for full body*/
+body {
+    background-color: #8096AD;
+}
+
 /*Styling to make page wrapper dive take up whole screen*/
 #page-wrapper {
     height: 100%;
@@ -47,12 +52,12 @@
 
 /*Styling for the add movie button*/
 #add-movie-btn {
-    margin-left: 4em;
+    margin-left: 8em;
 }
 
 /*Styling sort select div*/
 #nav-sort-div {
-    margin-right: 4em;
+    margin-right: 8em;
 }
 
 /*Changes cursor to a pointer finger when over a movie list image*/
@@ -65,9 +70,24 @@
     background-color: #8096AD;
 }
 
+/*Making the movie cards scale up on hover, with a small transition time so it is not instant*/
+.movie-card, .search-card {
+    transition: all 200ms;
+}
+.movie-card:hover, .search-card:hover {
+    transform: scale(1.1);
+}
+
 /*Rounding edges and preventing image inside from overflowing*/
+/*Adding shadow borders*/
 .movie-card {
     border-radius: 2em;
+    overflow: hidden;
+    box-shadow: 6px 12px 12px #254895;
+}
+.search-card {
+    box-shadow: 0 0 6px 6px #8096AD;
+    border-radius: 1em;
     overflow: hidden;
 }
 

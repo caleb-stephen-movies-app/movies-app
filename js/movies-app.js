@@ -131,7 +131,7 @@ $(function() {
         async singleMovie(div, movie) {
             div.prepend(`
                 <div class="div-card col-3" data-movie-id="${movie.id}">
-                    <div class="card movie-card">
+                    <div class="card movie-card border-0">
                         <a role="button" href="#single-movie-modal" data-bs-toggle="modal">
                             <img src=${movie.poster} class="card-img all-movie-img">
                         </a>
@@ -190,7 +190,7 @@ $(function() {
                 if(index < 6) {
                     $("#movie-list").append(`
                     <div class="col-2">
-                        <div class="card search-card" data-movie-tmdb-id="${movie.id}">
+                        <div class="card search-card border-0" data-movie-tmdb-id="${movie.id}">
                             <img src="https://image.tmdb.org/t/p/original/${movie.poster_path}" class="card-img search-card-img">
                         </div>
                     </div>
