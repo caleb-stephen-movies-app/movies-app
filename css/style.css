@@ -61,3 +61,11 @@ body {
 .search-card, .search-card-img {
     height: 240px;
 }
+
+#add-movie-btn {
+    color: #8096AD;
+}
+
+#add-movie-btn:hover {
+    color: #254895;
+}
