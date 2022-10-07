@@ -305,6 +305,8 @@ $(function() {
             })
 
             $("#addMovieBtn").on("click", function() {
+                $("#addMovieText").val("");
+                $("#moviesList").html("");
                 setTimeout(function() {
                     $("#addMovieText").focus();
                 }, 500);
