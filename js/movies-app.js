@@ -120,7 +120,7 @@ $(function() {
             const cardDiv = $("#cards-div");
             cardDiv.empty();
             dataPromise.then(movieData => {
-                movieData.forEach((movie) => {
+                User.sortMovies(movieData).forEach((movie) => {
                     Print.singleMovie(cardDiv, movie);
                 });
                 $("#loading-div").addClass("d-none");
@@ -252,6 +252,31 @@ $(function() {
 
             Print.allMovies(Get.allMovies());
             button.removeAttr("disabled");
+        },
+        // Sorts movies based on user choice. returns new array of movies
+        sortMovies(movies) {
+            // Checks which value user selected and sorts
+            switch($("#sort-select").children("option:selected").val()){
+                case "1":
+                    return movies;
+                    break;
+                case "2":
+                    return movies.sort((prev, current) => prev.title.localeCompare(current.title)).reverse();
+                    break;
+                case "3":
+                    return movies.sort((prev, current) => prev.title.localeCompare(current.title));
+                    break;
+                case "4":
+                    return movies.sort((prev, current) => parseInt(prev.year) - parseInt(current.year));
+                    break;
+                case "5":
+                    return movies.sort((prev, current) => parseInt(prev.year) - parseInt(current.year)).reverse();
+                    break;
+                default:
+                    console.log("Unknown sort parameter");
+                    return null;
+                    break;
+            }
         }
     }
     // Utilities Object and Methods
@@ -276,7 +301,6 @@ $(function() {
                 bootstrap.Modal.getInstance(modal).hide();
             }
         }
-
     }
     // Events Object and Methods
     const Events = {
@@ -335,6 +359,10 @@ $(function() {
                     MovieApp.enterBackRoom();
                 }
             })
+            // Listens for change in sort select
+            $("#sort-select").change(function() {
+                Print.allMovies(Get.allMovies());
+            });
         }
     }
 
