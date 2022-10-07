@@ -78,3 +78,13 @@
 .search-card, .search-card-img {
     height: 240px;
 }
+
+/*Styling all modal headers*/
+.modal-header {
+    border-bottom: 2px solid #254895;
+}
+
+/*Moving text input in line with other inputs on the modal*/
+#title-input {
+    padding-left: 12px;
+}

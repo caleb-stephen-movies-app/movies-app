@@ -16,9 +16,9 @@ $(function() {
         // Prints current movie database on screen and initializes all event listeners
         initialize() {
             // setTimeout just to show the loading screen for more than a split second. It can be removed for production
-            setTimeout(() => {
+            // setTimeout(() => {
                 Print.allMovies(Get.allMovies());
-            }, 5000);
+            // }, 5000);
             Events.initialize();
         },
         // String that holds user input for secret code
@@ -167,16 +167,16 @@ $(function() {
             let modalBodyDiv = $("#single-movie");
             modalHeaderDiv.empty();
             modalHeaderDiv.append(`
-                <input id="title-input" class="modal-title w-100" type="text" value="${movie.title}">
+                <input id="title-input" class="w-100 modal-input border-dark bg-light" type="text" value="${movie.title}">
             `);
             modalBodyDiv.empty();
             modalBodyDiv.attr("data-movie-id", movie.id);
             modalBodyDiv.append(`
-                 <input id="genre-input" value="${movie.genre}">
-                 <textarea id="plot-input" class="w-100" rows="9">${movie.plot}</textarea>
-                 <input id="year-input" value="${movie.year}">
+                 <input id="genre-input" class="modal-input border-dark bg-light" value="${movie.genre}">
+                 <textarea id="plot-input" class="w-100 modal-input border-dark bg-light" rows="9">${movie.plot}</textarea>
+                 <input id="year-input" class="modal-input border-dark bg-light" value="${movie.year}">
                  <div class="d-flex justify-content-center">
-                     <button id="save-edit-btn" class="btn btn-primary">Save Edit</button>
+                     <button id="save-edit-btn" class="btn btn-primary mt-3">Save Edit</button>
                  </div>
             `);
         },
