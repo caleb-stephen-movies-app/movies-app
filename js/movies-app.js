@@ -16,9 +16,9 @@ $(function() {
         // Prints current movie database on screen and initializes all event listeners
         initialize() {
             // setTimeout just to show the loading screen for more than a split second. It can be removed for production
-            // setTimeout(() => {
+            setTimeout(() => {
                 Print.allMovies(Get.allMovies());
-            // }, 5000);
+            }, 5000);
             Events.initialize();
         },
         // String that holds user input for secret code

@@ -1,37 +1,16 @@
+/*Overall Background Color*/
 body {
     background-color: #8096AD;
 }
 
-#movie-list img {
-    cursor: pointer;
-}
-
-.normal-bg {
-    background-color: #8096AD;
-}
-
-.back-room-bg {
-    background-color: #622929;
-}
-
-@keyframes spinning {
-    from { transform: rotate(0deg) }
-    to { transform: rotate(360deg) }
-}
-
-.spin {
-    animation-name: spinning;
-    animation-duration: 3s;
-    animation-iteration-count: infinite;
-    /* linear | ease | ease-in | ease-out | ease-in-out */
-    animation-timing-function: linear;
-}
-
+/*Styling to make page wrapper dive take up whole screen*/
 #page-wrapper {
     height: 100%;
     width: 100%;
 }
 
+/*Styling to make the div for loading screen the correct size and position*/
+/*Also makes the position absolute to always be on the screen*/
 #loading-div {
     position: absolute;
     top: 78px;
@@ -39,33 +18,61 @@ body {
     width: 100vw;
 }
 
+/*Class used by loading div to hide when not needed*/
+.hidden {
+    opacity: 0;
+}
+
+/*Loading image styling for size and position*/
 #loading-img {
     height: 100px;
     width: 100px;
     text-align: center;
 }
 
-.hidden {
-    opacity: 0;
+/*Styling to spin our loading image*/
+@keyframes spinning {
+    from { transform: rotate(0deg) }
+    to { transform: rotate(360deg) }
+}
+.spin {
+    animation-name: spinning;
+    animation-duration: 1.2s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
 }
 
+/*Background colors to toggle between for back room*/
+.normal-bg {
+    background-color: #8096AD;
+}
+.back-room-bg {
+    background-color: #622929;
+}
+
+/*Coloring for the add movie button*/
+#add-movie-btn {
+    color: #8096AD;
+}
+#add-movie-btn:hover {
+    color: #254895;
+}
+
+/*Changes cursor to a pointer finger when over a movie list image*/
+#movie-list img {
+    cursor: pointer;
+}
+
+/*Rounding edges and preventing image inside from overflowing*/
 .movie-card {
     border-radius: 2em;
     overflow: hidden;
 }
 
+/*Making set height for images and cards*/
 .all-movie-img {
     height: 429px;
 }
-
 .search-card, .search-card-img {
     height: 240px;
-}
-
-#add-movie-btn {
-    color: #8096AD;
-}
-
-#add-movie-btn:hover {
-    color: #254895;
 }
