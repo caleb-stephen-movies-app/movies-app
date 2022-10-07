@@ -9,6 +9,11 @@ body {
     width: 100%;
 }
 
+/*Offset the top navbar*/
+#all-movie-cards-div {
+    margin-top: 62px;
+}
+
 /*Styling to make the div for loading screen the correct size and position*/
 /*Also makes the position absolute to always be on the screen*/
 #loading-div {
