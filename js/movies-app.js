@@ -14,9 +14,9 @@ $(function() {
         },
         initialize() {
             // Prints current movie database on screen and initializes all event listeners
-            setTimeout(() => {
+            // setTimeout(() => {
                 Print.allMovies(Get.allMovies());
-            }, 5000);
+            // }, 5000);
             Events.initialize();
         },
         hiddenString: "",
@@ -118,9 +118,9 @@ $(function() {
             // prints single movie card from our database to be inserted into the all movies list
             div.append(`
                 <div class="divCard col-3" data-movie-id="${movie.id}">
-                    <div class="card" style="border-radius: 2em; overflow: hidden;">
+                    <div class="card movie-card">
                         <a role="button" href="#singleMovieModal" data-bs-toggle="modal">
-                            <img src=${movie.poster} class="card-img all-movie-img" style="height: 429px;">
+                            <img src=${movie.poster} class="card-img all-movie-img">
                         </a>
                     </div>
                 </div>
@@ -141,7 +141,7 @@ $(function() {
              <p>Genre: ${movie.genre}</p>
              <p>Plot :${movie.plot}</p>
              <p>Year: ${movie.year}</p>
-             <div class="d-flex justify-content-between" style="width: 100%;">
+             <div class="d-flex justify-content-between">
                  <button class="editBtn btn btn-primary">Edit Movie</button>
                  <button class="deleteBtn btn btn-danger">Delete Movie</button>
              </div>
@@ -165,7 +165,7 @@ $(function() {
                  <input id="genreInput" value="${movie.genre}">
                  <textarea id="plotInput" class="w-100" rows="9">${movie.plot}</textarea>
                  <input id="yearInput" value="${movie.year}">
-                 <div class="d-flex justify-content-center" style="width: 100%;">
+                 <div class="d-flex justify-content-center">
                      <button id="saveEditBtn" class="btn btn-primary">Save Edit</button>
                  </div>
             `);
@@ -179,8 +179,8 @@ $(function() {
                 if(index < 6) {
                     $("#moviesList").append(`
                     <div class="col-2">
-                        <div class="card" data-tmdb-id="${movie.tmdbId}" data-movie-id="${movie.id}" style="height: 240px;">
-                            <img src="https://image.tmdb.org/t/p/original/${movie.poster_path}" class="card-img" style="height: 240px;">
+                        <div class="card search-card" data-tmdb-id="${movie.tmdbId}" data-movie-id="${movie.id}">
+                            <img src="https://image.tmdb.org/t/p/original/${movie.poster_path}" class="card-img search-card-img">
                         </div>
                     </div>
                 `);
@@ -190,9 +190,9 @@ $(function() {
         addMovie(movie) {
             $("#cardsDiv").prepend(`
                 <div class="divCard col-3" data-tmdb-id="${movie.tmdbId}" data-movie-id="${movie.id}">
-                    <div class="card" style="border-radius: 2em; overflow: hidden;">
+                    <div class="card movie-card">
                         <a role="button" href="#singleMovieModal" data-bs-toggle="modal">
-                            <img src=${movie.poster} class="card-img all-movie-img" style="height: 429px;">
+                            <img src=${movie.poster} class="card-img all-movie-img">
                         </a>
                     </div>
                 </div>

@@ -1,3 +1,7 @@
+body {
+    background-color: #8096AD;
+}
+
 #moviesList img {
     cursor: pointer;
 }
@@ -23,6 +27,11 @@
     animation-timing-function: linear;
 }
 
+#page-wrapper {
+    height: 100%;
+    width: 100%;
+}
+
 #loading-div {
     position: absolute;
     top: 78px;
@@ -38,4 +47,17 @@
 
 .hidden {
     opacity: 0;
+}
+
+.movie-card {
+    border-radius: 2em;
+    overflow: hidden;
+}
+
+.all-movie-img {
+    height: 429px;
+}
+
+.search-card, .search-card-img {
+    height: 240px;
 }
