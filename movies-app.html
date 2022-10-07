@@ -30,15 +30,18 @@
 
         <!--Navbar -->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark text-light sticky-top">
-            <div class="container-fluid d-flex justify-content-between">
-                <h2 id="header-title" class="nav-item mx-3">
-                    <a id="add-movie-btn" role="button" href="#add-movie-modal" class="nav-link" data-bs-toggle="modal">
-                        Add Movie
-                    </a>
-                </h2>
+            <div class="container-fluid d-flex justify-content-between py-1">
+<!--                <h2 id="header-title" class="nav-item mx-3">-->
+<!--                    <a id="add-movie-btn" role="button" href="#add-movie-modal" class="nav-link" data-bs-toggle="modal">-->
+<!--                        Add Movie-->
+<!--                    </a>-->
+<!--                </h2>-->
+                <div class="nav-item">
+                    <button id="add-movie-btn" class="btn text-dark" data-bs-toggle="modal" data-bs-target="#add-movie-modal">Add Movie</button>
+                </div>
                 <h3 id="back-room-timer"></h3>
                 <div id="nav-sort-div" class="nav-item">
-                    <select name="sort-select" id="sort-select" class="form-select bg-secondary" autocomplete="off">
+                    <select name="sort-select" id="sort-select" class="form-select border-dark" autocomplete="off">
                         <option value="1">Sort</option>
                         <option value="2">A - Z</option>
                         <option value="3">Z - A</option>
@@ -53,7 +56,7 @@
         <div id="main-wrapper">
 
             <!-- Loading Screen Div-->
-            <div id="loading-div" class="d-flex justify-content-center align-items-center normal-bg">
+            <div id="loading-div" class="d-flex justify-content-center normal-bg">
                 <img src="img/megamanicon.png" id="loading-img" class="spin">
             </div>
 
@@ -90,7 +93,7 @@
             </div>
 
             <!--All Movie Cards-->
-            <div class="container my-3">
+            <div class="container-fluid px-5 py-5">
                 <div id="cards-div" class="row g-5"></div>
             </div>
 

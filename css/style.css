@@ -1,8 +1,3 @@
-/*Overall Background Color*/
-body {
-    background-color: #8096AD;
-}
-
 /*Styling to make page wrapper dive take up whole screen*/
 #page-wrapper {
     height: 100%;
@@ -13,8 +8,7 @@ body {
 /*Also makes the position absolute to always be on the screen*/
 #loading-div {
     position: absolute;
-    top: 78px;
-    height: calc(100vh - 78px);
+    height: 100vw;
     width: 100vw;
 }
 
@@ -27,7 +21,8 @@ body {
 #loading-img {
     height: 100px;
     width: 100px;
-    text-align: center;
+    position: absolute;
+    top: 20em;
 }
 
 /*Styling to spin our loading image*/
@@ -50,17 +45,24 @@ body {
     background-color: #622929;
 }
 
-/*Coloring for the add movie button*/
+/*Styling for the add movie button*/
 #add-movie-btn {
-    color: #8096AD;
+    margin-left: 4em;
 }
-#add-movie-btn:hover {
-    color: #254895;
+
+/*Styling sort select div*/
+#nav-sort-div {
+    margin-right: 4em;
 }
 
 /*Changes cursor to a pointer finger when over a movie list image*/
 #movie-list img {
     cursor: pointer;
+}
+
+/*Stying sort select element*/
+#sort-select, #sort-select>option, #add-movie-btn {
+    background-color: #8096AD;
 }
 
 /*Rounding edges and preventing image inside from overflowing*/
